@@ -13,7 +13,7 @@ export class CreateCatalogDto {
 
   @ApiProperty({
     description: 'The description of the catalog',
-    example: 'Collection for Summer 2024',
+    example: 'Collection for Summer 2025',
     required: false
   })
   @IsOptional()
