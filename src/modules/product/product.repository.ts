@@ -1,27 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BaseRepository } from '../../common/repositories/base.repository';
-import { Product } from '@prisma/client';
+import { ProductEntity } from './entities/product.entity';
+import { Prisma } from '@prisma/client';
+
+type ProductInclude = {
+  catalog?: boolean;
+};
+
 
 @Injectable()
-export class ProductRepository extends BaseRepository<Product> {
+export class ProductRepository extends BaseRepository<ProductEntity,
+Prisma.ProductCreateInput,
+Prisma.ProductUpdateInput,
+ProductInclude>  {
   constructor(prisma: PrismaService) {
     super(prisma, 'product');
   }
 
-  async findAllWithCatalog(): Promise<Product[]> {
+  async findAllWithCatalog() {
     return this.findAll({ catalog: true });
   }
 
-  async findOneWithCatalog(id: number): Promise<Product> {
+  async findOneWithCatalog(id: number) {
     return this.findOne(id, { catalog: true });
   }
 
-  async softDelete(id: number): Promise<Product> {
-    return this.prisma.product.update({
-      where: { id },
-      data: { status: "DELETED" }
-    });
+  async softDelete(id: number) {
+    return this.update(id, { status: "DELETED" });
   }
 
 }

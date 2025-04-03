@@ -53,7 +53,7 @@ export class CreateProductDto {
   @ApiProperty({
     description: 'The status of the product',
     enum: PRODUCT_STATUS,
-    default: PRODUCT_STATUS.ACTIVE,
+    default: "ACTIVE",
     required: false
   })
   @IsOptional()

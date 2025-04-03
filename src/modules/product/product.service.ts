@@ -11,10 +11,18 @@ export class ProductService {
     private readonly catalogService: CatalogService,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(data: CreateProductDto) {
 
-    await this.catalogService.findOne(createProductDto.catalogId);
-    return this.productRepository.create(createProductDto);
+    await this.catalogService.findOne(data.catalogId);
+
+    const dataToSave = {
+      ...data,
+      catalog: {
+        connect: { id: data.catalogId }
+      }
+    };
+
+    return this.productRepository.create(dataToSave);
   }
 
   async findAll() {
@@ -22,15 +30,28 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    return this.productRepository.findOneWithCatalog(id);
+    const product = await this.productRepository.findOne(id);
+    if (!product) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+    return product
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
 
-    if (updateProductDto.catalogId) {
-      await this.catalogService.findOne(updateProductDto.catalogId);
+  async findOneWithCatalog(id: number) {
+    const product = await this.productRepository.findOneWithCatalog(id);
+    if (!product) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
     }
-    return this.productRepository.update(id, updateProductDto);
+    return product;
+  }
+
+  async update(id: number, data: UpdateProductDto) {
+
+    if (data.catalogId) {
+      await this.catalogService.findOne(data.catalogId);
+    }
+    return this.productRepository.update(id, data);
   }
 
   async softDelete(id: number) {

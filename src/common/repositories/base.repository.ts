@@ -2,25 +2,28 @@ import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BaseEntity } from '../interfaces/base.interface';
 
-export abstract class BaseRepository<T extends BaseEntity> {
+export abstract class BaseRepository<T extends BaseEntity,
+CreateInput = unknown,
+UpdateInput = unknown,
+Include = unknown> {
   protected constructor(
     protected readonly prisma: PrismaService,
     protected readonly modelName: string,
   ) {}
 
-  async create(data: any): Promise<T> {
+  async create(data: CreateInput): Promise<T> {
     return this.prisma[this.modelName].create({
       data,
     });
   }
 
-  async findAll(include?: object): Promise<T[]> {
+  async findAll(include?: Include): Promise<T[]> {
     return this.prisma[this.modelName].findMany({
       include,
     });
   }
 
-  async findOne(id: number, include?: object): Promise<T> {
+  async findOne(id: number, include?: Include): Promise<T> {
     const entity = await this.prisma[this.modelName].findUnique({
       where: { id },
       include,
@@ -33,9 +36,9 @@ export abstract class BaseRepository<T extends BaseEntity> {
     return entity;
   }
 
-  async update(id: number, data: any): Promise<T> {
+  async update(id: number, data: UpdateInput): Promise<T> {
     try {
-      return await this.prisma[this.modelName].update({
+      return this.prisma[this.modelName].update({
         where: { id },
         data,
       });
@@ -46,7 +49,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   async delete(id: number): Promise<T> {
     try {
-      return await this.prisma[this.modelName].delete({
+      return this.prisma[this.modelName].delete({
         where: { id },
       });
     } catch (error) {

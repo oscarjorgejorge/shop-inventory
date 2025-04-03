@@ -51,7 +51,7 @@ export class ProductEntity implements PrismaProduct, BaseEntity {
   @ApiProperty({ 
     description: 'The status of the product',
     enum: PRODUCT_STATUS,
-    default: PRODUCT_STATUS.ACTIVE
+    default: "ACTIVE",
   })
   status: ProductStatus;
 }
