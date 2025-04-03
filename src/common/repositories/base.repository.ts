@@ -44,7 +44,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
     }
   }
 
-  async remove(id: number): Promise<T> {
+  async delete(id: number): Promise<T> {
     try {
       return await this.prisma[this.modelName].delete({
         where: { id },

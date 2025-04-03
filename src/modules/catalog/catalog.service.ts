@@ -23,7 +23,7 @@ export class CatalogService {
     return this.catalogRepository.update(id, updateCatalogDto);
   }
 
-  async remove(id: number) {
-    return this.catalogRepository.remove(id);
+  async delete(id: number) {
+    return this.catalogRepository.delete(id);
   }
 }

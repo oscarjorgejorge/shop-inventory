@@ -6,15 +6,17 @@ export class LoggingMiddleware implements NestMiddleware {
   private logger = new Logger('HTTP');
 
   use(req: Request, res: Response, next: NextFunction) {
-    this.logger.log(`${req.method} ${req.url}`);
+    let message = `${req.method} ${req.originalUrl}`;
     
     if (req.body && Object.keys(req.body).length > 0) {
-      this.logger.log('Body: ' + JSON.stringify(req.body, null, 2));
+      message += `\nBody: ${JSON.stringify(req.body, null, 2)}`;
     }
 
     if (Object.keys(req.query).length > 0) {
-      this.logger.log('Query: ' + JSON.stringify(req.query, null, 2));
+      message += `\nQuery: ${JSON.stringify(req.query, null, 2)}`;
     }
+
+    this.logger.log(message);
 
     next();
   }

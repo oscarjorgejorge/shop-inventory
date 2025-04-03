@@ -23,6 +23,7 @@ model Product {
   name        String
   description String?
   price       Decimal
+  status      String   @default("ACTIVE")
   stock       Int
   catalogId   Int
   catalog     Catalog  @relation(fields: [catalogId], references: [id])

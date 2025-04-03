@@ -93,7 +93,7 @@ import { CatalogEntity } from './entities/catalog.entity';
       status: HttpStatus.NOT_FOUND, 
       description: 'Catalog not found' 
     })
-    async remove(@Param('id', ParseIntPipe) id: number) {
-      return this.catalogService.remove(id);
+    async delete(@Param('id', ParseIntPipe) id: number) {
+      return this.catalogService.delete(id);
     }
   }
