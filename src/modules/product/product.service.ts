@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProductRepository } from './product.repository';
+import { Injectable } from '@nestjs/common';
+import { ProductFilters, ProductRepository } from './product.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CatalogService } from '../catalog/catalog.service';
+import { PaginationOptions } from 'src/common/interfaces/base.interface';
 
 @Injectable()
 export class ProductService {
@@ -15,35 +16,26 @@ export class ProductService {
 
     await this.catalogService.findOne(data.catalogId);
 
+    const { catalogId, ...productData } = data;
+
+
     const dataToSave = {
-      ...data,
+      ...productData,
       catalog: {
-        connect: { id: data.catalogId }
+        connect: { id: catalogId }
       }
     };
-
+  
     return this.productRepository.create(dataToSave);
   }
 
-  async findAll() {
-    return this.productRepository.findAllWithCatalog();
+  async findAll(conditions: PaginationOptions<ProductFilters>) {
+    console.log({conditions})
+    return this.productRepository.findAllProducts(conditions);
   }
 
   async findOne(id: number) {
-    const product = await this.productRepository.findOne(id);
-    if (!product) {
-        throw new NotFoundException(`Product with ID ${id} not found`);
-    }
-    return product
-  }
-
-
-  async findOneWithCatalog(id: number) {
-    const product = await this.productRepository.findOneWithCatalog(id);
-    if (!product) {
-        throw new NotFoundException(`Product with ID ${id} not found`);
-    }
-    return product;
+    return this.productRepository.findOne(id);
   }
 
   async update(id: number, data: UpdateProductDto) {

@@ -3,27 +3,45 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { BaseRepository } from '../../common/repositories/base.repository';
 import { ProductEntity } from './entities/product.entity';
 import { Prisma } from '@prisma/client';
+import { PaginationOptions } from 'src/common/interfaces/base.interface';
 
-type ProductInclude = {
-  catalog?: boolean;
-};
+export interface ProductFilters {
+  catalogId?: number
+}
+
+function productQueryBuilder(filters: ProductFilters) {
+  console.log({filters})
+  const {catalogId} = filters;
+
+  const where : Prisma.ProductWhereInput = {}
+
+  if (catalogId !== undefined) {
+    where.catalogId = Number(catalogId)
+  }
+
+  return where;
+}
 
 
 @Injectable()
 export class ProductRepository extends BaseRepository<ProductEntity,
 Prisma.ProductCreateInput,
 Prisma.ProductUpdateInput,
-ProductInclude>  {
+Prisma.ProductInclude,
+Prisma.ProductWhereInput>  {
   constructor(prisma: PrismaService) {
     super(prisma, 'product');
   }
 
-  async findAllWithCatalog() {
-    return this.findAll({ catalog: true });
-  }
+  async findAllProducts(conditions: PaginationOptions<ProductFilters>) {
 
-  async findOneWithCatalog(id: number) {
-    return this.findOne(id, { catalog: true });
+    const {filters = {}, page, limit} = conditions;
+    const where = productQueryBuilder(filters);
+
+    console.log({where})
+
+
+    return this.findAll({page, limit, where});
   }
 
   async softDelete(id: number) {

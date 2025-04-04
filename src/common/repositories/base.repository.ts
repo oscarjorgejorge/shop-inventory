@@ -5,7 +5,8 @@ import { BaseEntity } from '../interfaces/base.interface';
 export abstract class BaseRepository<T extends BaseEntity,
 CreateInput = unknown,
 UpdateInput = unknown,
-Include = unknown> {
+Include = unknown,
+Where = unknown> {
   protected constructor(
     protected readonly prisma: PrismaService,
     protected readonly modelName: string,
@@ -17,9 +18,28 @@ Include = unknown> {
     });
   }
 
-  async findAll(include?: Include): Promise<T[]> {
+  async findAll(
+    options?: {
+      include?: Include;
+      page?: number;
+      limit?: number;
+      where?: Where;
+    }
+  ): Promise<T[]> {
+    const {
+      include,
+      page = 1,
+      limit = 10,
+      where = {},
+    } = options || {};
+
+    const skip = (Number(page) - 1) * Number(limit);
+
     return this.prisma[this.modelName].findMany({
       include,
+      where,
+      skip,
+      take: Number(limit),
     });
   }
 

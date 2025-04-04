@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CatalogRepository } from './catalog.repository';
 import { CreateCatalogDto } from './dto/create-catalog.dto';
 import { UpdateCatalogDto } from './dto/update-catalog.dto';
@@ -14,23 +14,13 @@ export class CatalogService {
   }
 
   async findAll(){
-    return this.catalogRepository.findAllWithProducts();
+    return this.catalogRepository.findAll();
+
+    // return this.catalogRepository.findAllWithProducts();
   }
 
   async findOne(id: number){
-    const catalog = await this.catalogRepository.findOne(id);
-    if (!catalog) {
-      throw new NotFoundException(`Catalog with ID ${id} not found`);
-    }
-    return catalog;
-  }
-
-  async findOneWithProducts(id: number) {
-    const catalog = await this.catalogRepository.findOneWithProducts(id);
-    if (!catalog) {
-      throw new NotFoundException(`Catalog with ID ${id} not found`);
-    }
-    return catalog;
+    return this.catalogRepository.findOne(id);
   }
 
   async update(id: number, data: UpdateCatalogDto){

@@ -19,11 +19,11 @@ CatalogInclude> {
     super(prismaService, 'catalog');
   }
 
-  async findAllWithProducts() {
-    return this.findAll({ products: true });
-  }
+  // async findAllWithProducts() {
+  //   return this.findAll({ products: true });
+  // }
 
-  async findOneWithProducts(id: number) {
-    return this.findOne(id, { products: true });
-  }
+  // async findOneWithProducts(id: number) {
+  //   return this.findOne(id, { products: true });
+  // }
 }

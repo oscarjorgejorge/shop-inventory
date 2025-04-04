@@ -3,3 +3,10 @@ export interface BaseEntity {
     createdAt: Date;
     updatedAt: Date;
   }
+
+  export interface PaginationOptions<T> {
+    page?: number;
+    limit?: number;
+    filters?: T
+  }
+  

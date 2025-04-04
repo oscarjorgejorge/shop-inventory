@@ -8,17 +8,20 @@ import {
     Delete,
     ParseIntPipe,
     HttpStatus,
+    Query,
   } from '@nestjs/common';
   import { 
     ApiTags, 
     ApiOperation, 
     ApiResponse, 
-    ApiParam 
+    ApiParam, 
+    ApiQuery
   } from '@nestjs/swagger';
   import { ProductService } from './product.service';
   import { CreateProductDto } from './dto/create-product.dto';
   import { UpdateProductDto } from './dto/update-product.dto';
   import { ProductEntity } from './entities/product.entity';
+import { FindProductsDto } from './dto/find-products.dto';
   
   @ApiTags('products')
   @Controller('products')
@@ -43,8 +46,29 @@ import {
       description: 'List of all products',
       type: [ProductEntity] 
     })
-    async findAll() {
-      return this.productService.findAll();
+    @ApiQuery({ 
+      name: 'page', 
+      required: false, 
+      description: 'Page number',
+      type: Number 
+    })
+    @ApiQuery({ 
+      name: 'limit', 
+      required: false, 
+      description: 'Items per page',
+      type: Number 
+    })
+    @ApiQuery({ 
+      name: 'catalogId', 
+      required: false, 
+      description: 'Filter products by catalog ID',
+      type: Number 
+    })
+    async findAll(@Query() query: FindProductsDto) {
+
+      const {page, limit, ...filters} = query;
+      console.log({query})
+      return this.productService.findAll({page, limit, filters } );
     }
   
     @Get(':id')
@@ -93,7 +117,7 @@ import {
       status: HttpStatus.OK, 
       description: 'The product has been permanently deleted' 
     })
-    hardDelete(@Param('id', ParseIntPipe) id: number) {
+    delete(@Param('id', ParseIntPipe) id: number) {
       return this.productService.delete(id);
     }
 
