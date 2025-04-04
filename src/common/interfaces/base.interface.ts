@@ -4,9 +4,8 @@ export interface BaseEntity {
     updatedAt: Date;
   }
 
-  export interface PaginationOptions<T> {
+  export interface PaginationOptions {
     page?: number;
     limit?: number;
-    filters?: T
   }
   

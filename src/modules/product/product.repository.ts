@@ -6,46 +6,51 @@ import { Prisma } from '@prisma/client';
 import { PaginationOptions } from 'src/common/interfaces/base.interface';
 
 export interface ProductFilters {
-  catalogId?: number
+  catalogId?: number;
+}
+
+export interface ProductQueryOptions extends PaginationOptions {
+  filters: ProductFilters;
 }
 
 function productQueryBuilder(filters: ProductFilters) {
-  console.log({filters})
-  const {catalogId} = filters;
+  const { catalogId } = filters;
 
-  const where : Prisma.ProductWhereInput = {}
+  const where: Prisma.ProductWhereInput = {};
 
   if (catalogId !== undefined) {
-    where.catalogId = Number(catalogId)
+    where.catalogId = Number(catalogId);
   }
 
   return where;
 }
 
-
 @Injectable()
-export class ProductRepository extends BaseRepository<ProductEntity,
-Prisma.ProductCreateInput,
-Prisma.ProductUpdateInput,
-Prisma.ProductInclude,
-Prisma.ProductWhereInput>  {
-  constructor(prisma: PrismaService) {
-    super(prisma, 'product');
+export class ProductRepository extends BaseRepository<
+  ProductEntity,
+  Prisma.ProductCreateInput,
+  Prisma.ProductUpdateInput,
+  Prisma.ProductInclude,
+  Prisma.ProductWhereInput
+> {
+  constructor(private readonly prismaService: PrismaService) {
+    super(prismaService, 'product');
   }
 
-  async findAllProducts(conditions: PaginationOptions<ProductFilters>) {
+  async findByName(name: string): Promise<ProductEntity | null> {
+    return this.prismaService.product.findUnique({
+      where: { name },
+    });
+  }
 
-    const {filters = {}, page, limit} = conditions;
+  async findAllProducts(conditions: ProductQueryOptions): Promise<ProductEntity[]> {
+    const { filters = {}, page, limit } = conditions;
     const where = productQueryBuilder(filters);
 
-    console.log({where})
-
-
-    return this.findAll({page, limit, where});
+    return this.findAll({ page, limit, where });
   }
 
-  async softDelete(id: number) {
-    return this.update(id, { status: "DELETED" });
+  async softDelete(id: number): Promise<ProductEntity> {
+    return this.update(id, { status: 'DELETED' });
   }
-
 }

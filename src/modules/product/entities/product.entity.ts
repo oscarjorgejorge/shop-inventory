@@ -12,46 +12,48 @@ export class ProductEntity implements PrismaProduct, BaseEntity {
   @ApiProperty({ description: 'The name of the product' })
   name: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'The description of the product',
     required: false,
-    nullable: true 
+    nullable: true,
   })
   description: string | null;
 
   @ApiProperty({ description: 'The price of the product' })
   price: Decimal;
 
-  @ApiProperty({ description: 'The stock quantity' })
+  @ApiProperty({
+    description: 'The stock quantity',
+  })
   stock: number;
 
   @ApiProperty({ description: 'The ID of the catalog this product belongs to' })
   catalogId: number;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'The catalog this product belongs to',
-    type: () => CatalogEntity 
+    type: () => CatalogEntity,
   })
   catalog?: CatalogEntity;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'When the product was created',
     type: 'string',
-    format: 'date-time' 
+    format: 'date-time',
   })
   createdAt: Date;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'When the product was last updated',
     type: 'string',
-    format: 'date-time' 
+    format: 'date-time',
   })
   updatedAt: Date;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'The status of the product',
     enum: PRODUCT_STATUS,
-    default: "ACTIVE",
+    default: 'ACTIVE',
   })
-  status: ProductStatus;
+  status: ProductStatus | string;
 }

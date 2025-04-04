@@ -2,11 +2,13 @@ import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BaseEntity } from '../interfaces/base.interface';
 
-export abstract class BaseRepository<T extends BaseEntity,
-CreateInput = unknown,
-UpdateInput = unknown,
-Include = unknown,
-Where = unknown> {
+export abstract class BaseRepository<
+  T extends BaseEntity,
+  CreateInput = unknown,
+  UpdateInput = unknown,
+  Include = unknown,
+  Where = unknown,
+> {
   protected constructor(
     protected readonly prisma: PrismaService,
     protected readonly modelName: string,
@@ -18,20 +20,13 @@ Where = unknown> {
     });
   }
 
-  async findAll(
-    options?: {
-      include?: Include;
-      page?: number;
-      limit?: number;
-      where?: Where;
-    }
-  ): Promise<T[]> {
-    const {
-      include,
-      page = 1,
-      limit = 10,
-      where = {},
-    } = options || {};
+  async findAll(options?: {
+    include?: Include;
+    page?: number;
+    limit?: number;
+    where?: Where;
+  }): Promise<T[]> {
+    const { include, page = 1, limit = 10, where = {} } = options || {};
 
     const skip = (Number(page) - 1) * Number(limit);
 

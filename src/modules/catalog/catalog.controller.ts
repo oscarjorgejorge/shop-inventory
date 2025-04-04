@@ -8,17 +8,20 @@ import {
     Delete,
     ParseIntPipe,
     HttpStatus,
+    Query,
   } from '@nestjs/common';
   import { 
     ApiTags, 
     ApiOperation, 
     ApiResponse, 
-    ApiParam 
+    ApiParam, 
+    ApiQuery
   } from '@nestjs/swagger';
   import { CatalogService } from './catalog.service';
   import { CreateCatalogDto } from './dto/create-catalog.dto';
   import { UpdateCatalogDto } from './dto/update-catalog.dto';
 import { CatalogEntity } from './entities/catalog.entity';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
   
   @ApiTags('catalogs')
   @Controller('catalogs')
@@ -37,14 +40,26 @@ import { CatalogEntity } from './entities/catalog.entity';
     }
   
     @Get()
+    @ApiQuery({
+      name: 'page',
+      required: false,
+      description: 'Page number',
+      type: Number,
+    })
+    @ApiQuery({
+      name: 'limit',
+      required: false,
+      description: 'Items per page',
+      type: Number,
+    })
     @ApiOperation({ summary: 'Get all catalogs' })
     @ApiResponse({ 
       status: HttpStatus.OK, 
       description: 'List of all catalogs',
       type: [CatalogEntity] 
     })
-    async findAll() {
-      return this.catalogService.findAll();
+    async findAll(@Query() query: PaginationDto) {
+      return this.catalogService.findAll(query);
     }
   
     @Get(':id')
