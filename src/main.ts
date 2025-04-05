@@ -3,13 +3,19 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { json } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const port = configService.get('PORT', 3000);
 
   app.use(json());
 
   app.useGlobalPipes(new ValidationPipe());
+
+  app.useGlobalFilters(new GlobalExceptionFilter(configService));
 
   const config = new DocumentBuilder()
     .setTitle('Shop Inventory API - Oscar Jorge')
@@ -20,6 +26,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(port);
 }
 bootstrap();

@@ -60,6 +60,7 @@ export class ProductController {
   })
   async findAll(@Query() query: FindProductsDto) {
     const { page, limit, ...filters } = query;
+
     return this.productService.findAllProducts({ page, limit, filters });
   }
 
