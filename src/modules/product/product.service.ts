@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { ProductQueryOptions, ProductRepository } from './product.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -8,6 +8,7 @@ import { CatalogService } from '../catalog/catalog.service';
 export class ProductService {
   constructor(
     private readonly productRepository: ProductRepository,
+    @Inject(forwardRef(() => CatalogService))
     private readonly catalogService: CatalogService,
   ) {}
 
