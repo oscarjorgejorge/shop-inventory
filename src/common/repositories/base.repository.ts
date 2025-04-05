@@ -28,7 +28,7 @@ export abstract class BaseRepository<
   }): Promise<T[]> {
     const { include, page = 1, limit = 10, where = {} } = options || {};
 
-    const skip = (Number(page) - 1) * Number(limit);
+    const skip = (page - 1) * limit;
 
     return this.prisma[this.modelName].findMany({
       include,

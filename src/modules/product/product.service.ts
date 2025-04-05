@@ -35,6 +35,7 @@ export class ProductService {
   async update(id: number, data: UpdateProductDto) {
     if (data.name) {
       const existingProduct = await this.productRepository.findByName(data.name);
+
       if (existingProduct && existingProduct.id !== id) {
         throw new ConflictException(`Product with name "${data.name}" already exists`);
       }
@@ -55,7 +56,7 @@ export class ProductService {
   }
 
   async softDelete(id: number) {
-    return this.softDelete(id);
+    return this.productRepository.softDelete(id);
   }
 
   async delete(id: number) {
