@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Product as PrismaProduct } from '@prisma/client';
-import { BaseEntity } from '../../../common/interfaces/base.interface';
+import { BaseEntity } from '../../../common/types/base.types';
 import { CatalogEntity } from '../../catalog/entities/catalog.entity';
 import { PRODUCT_STATUS, ProductStatus } from '../constants/product-status.constant';
 import { Decimal } from '@prisma/client/runtime/library';

@@ -7,13 +7,13 @@ export class PaginationDto {
   @IsOptional()
   @IsInt()
   @Min(1)
-  @Transform(({ value }) => value ? Number(value) : 1)
+  @Transform(({ value }) => (value ? Number(value) : 1))
   page?: number;
 
   @ApiPropertyOptional({ description: 'Items per page', default: 10 })
   @IsOptional()
   @IsInt()
   @Min(1)
-    @Transform(({ value }) => value ? Number(value) : 10)
+  @Transform(({ value }) => (value ? Number(value) : 10))
   limit?: number;
 }

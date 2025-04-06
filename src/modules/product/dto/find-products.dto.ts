@@ -8,6 +8,6 @@ export class FindProductsDto extends PaginationDto {
   @IsOptional()
   @IsInt()
   @Min(1)
-  @Transform(({ value }) => value ? parseInt(value, 10) : undefined)
+  @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
   catalogId?: number;
-  }
+}

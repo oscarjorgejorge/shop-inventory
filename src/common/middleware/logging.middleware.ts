@@ -7,7 +7,7 @@ export class LoggingMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     let message = `${req.method} ${req.originalUrl}`;
-    
+
     if (req.body && Object.keys(req.body).length > 0) {
       message += `\nBody: ${JSON.stringify(req.body, null, 2)}`;
     }

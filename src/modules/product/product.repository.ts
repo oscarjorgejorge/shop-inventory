@@ -3,15 +3,15 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { BaseRepository } from '../../common/repositories/base.repository';
 import { ProductEntity } from './entities/product.entity';
 import { Prisma } from '@prisma/client';
-import { PaginationOptions } from 'src/common/interfaces/base.interface';
+import { PaginationOptions } from 'src/common/types/base.types';
 
-export interface ProductFilters {
+export type ProductFilters = {
   catalogId?: number;
-}
+};
 
-export interface ProductQueryOptions extends PaginationOptions {
-  filters: ProductFilters;
-}
+export type ProductQueryOptions = PaginationOptions & {
+  filters?: ProductFilters;
+};
 
 function productQueryBuilder(filters: ProductFilters) {
   const { catalogId } = filters;

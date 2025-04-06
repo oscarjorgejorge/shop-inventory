@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { BaseEntity } from '../interfaces/base.interface';
+import { BaseEntity } from '../types/base.types';
 
 export abstract class BaseRepository<
   T extends BaseEntity,

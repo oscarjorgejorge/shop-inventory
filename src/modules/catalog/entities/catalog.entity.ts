@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Catalog as PrismaCatalog, Product } from '@prisma/client';
-import { BaseEntity } from '../../../common/interfaces/base.interface';
+import { BaseEntity } from '../../../common/types/base.types';
 
 export class CatalogEntity implements PrismaCatalog, BaseEntity {
   @ApiProperty({ description: 'The unique identifier of the catalog' })
@@ -9,31 +9,31 @@ export class CatalogEntity implements PrismaCatalog, BaseEntity {
   @ApiProperty({ description: 'The name of the catalog' })
   name: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'The description of the catalog',
     required: false,
-    nullable: true 
+    nullable: true,
   })
   description: string | null;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'The products in this catalog',
     type: 'array',
-    items: { type: 'object' }
+    items: { type: 'object' },
   })
   products?: Product[];
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'When the catalog was created',
     type: 'string',
-    format: 'date-time' 
+    format: 'date-time',
   })
   createdAt: Date;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'When the catalog was last updated',
     type: 'string',
-    format: 'date-time' 
+    format: 'date-time',
   })
   updatedAt: Date;
 }

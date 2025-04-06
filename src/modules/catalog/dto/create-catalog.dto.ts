@@ -4,7 +4,7 @@ import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 export class CreateCatalogDto {
   @ApiProperty({
     description: 'The name of the catalog',
-    example: 'Summer Collection'
+    example: 'Summer Collection',
   })
   @IsNotEmpty()
   @IsString()
@@ -14,7 +14,7 @@ export class CreateCatalogDto {
   @ApiProperty({
     description: 'The description of the catalog',
     example: 'Collection for Summer 2025',
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
