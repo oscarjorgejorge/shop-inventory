@@ -54,7 +54,7 @@ export class CatalogController {
   })
   async findAll(@Query() query: PaginationDto) {
     console.log({ query });
-    return this.catalogService.findAll(query);
+    return this.catalogService.findMany(query);
   }
 
   @Get(':id')

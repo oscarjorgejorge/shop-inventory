@@ -43,11 +43,17 @@ export class ProductRepository extends BaseRepository<
     });
   }
 
-  async findAllProducts(conditions: ProductQueryOptions): Promise<ProductEntity[]> {
+  async findProducts(conditions: ProductQueryOptions): Promise<ProductEntity[]> {
     const { filters = {}, page, limit } = conditions;
     const where = productQueryBuilder(filters);
 
-    return this.findAll({ page, limit, where });
+    return this.findMany({ page, limit, where });
+  }
+
+  async countProducts(filters: ProductFilters): Promise<number> {
+    const where = productQueryBuilder(filters);
+
+    return this.count({ where });
   }
 
   async softDelete(id: number): Promise<ProductEntity> {

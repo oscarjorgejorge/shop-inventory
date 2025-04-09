@@ -12,14 +12,11 @@ describe('CatalogService', () => {
   const mockCatalogRepository = {
     findByName: jest.fn(),
     create: jest.fn(),
-    findAll: jest.fn(),
-    findOne: jest.fn(),
-    update: jest.fn(),
     delete: jest.fn(),
   };
 
   const mockProductService = {
-    findAllProducts: jest.fn(),
+    countProducts: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -75,18 +72,18 @@ describe('CatalogService', () => {
   describe('delete', () => {
     it('should throw BadRequestException when catalog has products', async () => {
       const catalogId = 1;
-      mockProductService.findAllProducts.mockResolvedValue([{ id: 1 }, { id: 2 }]);
+      mockProductService.countProducts.mockResolvedValue(2);
 
       await expect(service.delete(catalogId)).rejects.toThrow(BadRequestException);
-      expect(productService.findAllProducts).toHaveBeenCalledWith(
-        expect.objectContaining({ filters: { catalogId } }),
+      expect(productService.countProducts).toHaveBeenCalledWith(
+        expect.objectContaining({ catalogId }),
       );
     });
 
     it('should delete catalog when it has no products', async () => {
       const catalogId = 1;
       const deletedCatalog = { id: catalogId, name: 'Test Catalog' };
-      mockProductService.findAllProducts.mockResolvedValue([]);
+      mockProductService.countProducts.mockResolvedValue(0);
       mockCatalogRepository.delete.mockResolvedValue(deletedCatalog);
 
       const result = await service.delete(catalogId);

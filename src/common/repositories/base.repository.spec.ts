@@ -56,7 +56,7 @@ describe('BaseRepository', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('findMany', () => {
     it('should return all entities with default pagination', async () => {
       const mockEntities = [
         { id: 1, name: 'Entity 1' },
@@ -64,7 +64,7 @@ describe('BaseRepository', () => {
       ];
       mockPrismaService.testModel.findMany.mockResolvedValue(mockEntities);
 
-      const result = await repository.findAll();
+      const result = await repository.findMany();
 
       expect(result).toEqual(mockEntities);
       expect(mockPrismaService.testModel.findMany).toHaveBeenCalledWith({

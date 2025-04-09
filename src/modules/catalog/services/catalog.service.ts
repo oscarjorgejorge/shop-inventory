@@ -39,8 +39,8 @@ export class CatalogService {
     return this.catalogRepository.update(id, data);
   }
 
-  async findAll(conditions: PaginationOptions) {
-    return this.catalogRepository.findAll(conditions);
+  async findMany(conditions: PaginationOptions) {
+    return this.catalogRepository.findMany(conditions);
   }
 
   async findOne(id: number) {
@@ -48,11 +48,11 @@ export class CatalogService {
   }
 
   async delete(id: number) {
-    const products = await this.productService.findAllProducts({ filters: { catalogId: id } });
+    const numberOfproducts = await this.productService.countProducts({ catalogId: id });
 
-    if (products.length > 0) {
+    if (numberOfproducts > 0) {
       throw new BadRequestException(
-        `Cannot delete catalog with ID ${id}. It has ${products.length} associated products.`,
+        `Cannot delete catalog with ID ${id}. It has ${numberOfproducts} associated products.`,
       );
     }
     return this.catalogRepository.delete(id);

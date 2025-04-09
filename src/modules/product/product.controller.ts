@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { ProductService } from './product.service';
@@ -16,6 +17,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductEntity } from './entities/product.entity';
 import { FindProductsDto } from './dto/find-products.dto';
+import { CatalogExistsGuard } from './guards/catalog-exists.guard';
 
 @ApiTags('products')
 @Controller('products')
@@ -23,6 +25,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @UseGuards(CatalogExistsGuard)
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -61,7 +64,7 @@ export class ProductController {
   async findAll(@Query() query: FindProductsDto) {
     const { page, limit, ...filters } = query;
 
-    return this.productService.findAllProducts({ page, limit, filters });
+    return this.productService.findProducts({ page, limit, filters });
   }
 
   @Get(':id')
@@ -77,6 +80,7 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @UseGuards(CatalogExistsGuard)
   @ApiOperation({ summary: 'Update a product' })
   @ApiParam({ name: 'id', description: 'Product identifier' })
   @ApiResponse({

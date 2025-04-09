@@ -20,7 +20,13 @@ export abstract class BaseRepository<
     });
   }
 
-  async findAll(options?: {
+  async count(options?: { where?: Where }): Promise<number> {
+    return this.prisma[this.modelName].count({
+      where: options?.where || {},
+    });
+  }
+
+  async findMany(options?: {
     include?: Include;
     page?: number;
     limit?: number;
