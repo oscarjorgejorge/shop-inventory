@@ -5,10 +5,10 @@ import {
   Injectable,
   forwardRef,
 } from '@nestjs/common';
-import { CatalogRepository } from './catalog.repository';
-import { CreateCatalogDto } from './dto/create-catalog.dto';
-import { UpdateCatalogDto } from './dto/update-catalog.dto';
-import { ProductService } from '../product/product.service';
+import { CatalogRepository } from '../repositories/catalog.repository';
+import { CreateCatalogDto } from '../dto/create-catalog.dto';
+import { UpdateCatalogDto } from '../dto/update-catalog.dto';
+import { ProductService } from '../../product/product.service';
 import { PaginationOptions } from 'src/common/types/base.types';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/commo
 import { ProductQueryOptions, ProductRepository } from './product.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { CatalogService } from '../catalog/catalog.service';
+import { CatalogService } from '../catalog/services/catalog.service';
 
 @Injectable()
 export class ProductService {

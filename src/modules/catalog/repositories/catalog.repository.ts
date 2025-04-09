@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { BaseRepository } from '../../common/repositories/base.repository';
-import { CatalogEntity } from './entities/catalog.entity';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { BaseRepository } from '../../../common/repositories/base.repository';
+import { CatalogEntity } from '../entities/catalog.entity';
 import { Prisma } from '@prisma/client';
 
 type CatalogInclude = {
