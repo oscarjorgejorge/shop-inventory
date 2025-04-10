@@ -2,12 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CatalogService } from './catalog.service';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { CatalogRepository } from '../repositories/catalog.repository';
-import { ProductService } from '../../product/product.service';
+import { CatalogProductsService } from '../../catalog-products/catalog-products.service';
 
 describe('CatalogService', () => {
   let service: CatalogService;
   let repository: CatalogRepository;
-  let productService: ProductService;
+  let catalogProductsService: CatalogProductsService;
 
   const mockCatalogRepository = {
     findByName: jest.fn(),
@@ -15,8 +15,8 @@ describe('CatalogService', () => {
     delete: jest.fn(),
   };
 
-  const mockProductService = {
-    countProducts: jest.fn(),
+  const mockCatalogProductsService = {
+    countProductsByCatalogId: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -28,15 +28,15 @@ describe('CatalogService', () => {
           useValue: mockCatalogRepository,
         },
         {
-          provide: ProductService,
-          useValue: mockProductService,
+          provide: CatalogProductsService,
+          useValue: mockCatalogProductsService,
         },
       ],
     }).compile();
 
     service = module.get<CatalogService>(CatalogService);
     repository = module.get<CatalogRepository>(CatalogRepository);
-    productService = module.get<ProductService>(ProductService);
+    catalogProductsService = module.get<CatalogProductsService>(CatalogProductsService);
   });
 
   afterEach(() => {
@@ -72,18 +72,16 @@ describe('CatalogService', () => {
   describe('delete', () => {
     it('should throw BadRequestException when catalog has products', async () => {
       const catalogId = 1;
-      mockProductService.countProducts.mockResolvedValue(2);
+      mockCatalogProductsService.countProductsByCatalogId.mockResolvedValue(2);
 
       await expect(service.delete(catalogId)).rejects.toThrow(BadRequestException);
-      expect(productService.countProducts).toHaveBeenCalledWith(
-        expect.objectContaining({ catalogId }),
-      );
+      expect(catalogProductsService.countProductsByCatalogId).toHaveBeenCalledWith(catalogId);
     });
 
     it('should delete catalog when it has no products', async () => {
       const catalogId = 1;
       const deletedCatalog = { id: catalogId, name: 'Test Catalog' };
-      mockProductService.countProducts.mockResolvedValue(0);
+      mockCatalogProductsService.countProductsByCatalogId.mockResolvedValue(0);
       mockCatalogRepository.delete.mockResolvedValue(deletedCatalog);
 
       const result = await service.delete(catalogId);

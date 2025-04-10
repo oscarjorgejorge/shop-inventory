@@ -4,6 +4,7 @@ import { CatalogModule } from './modules/catalog/catalog.module';
 import { LoggingMiddleware } from './common/middleware/logging.middleware';
 import { ProductModule } from './modules/product/product.module';
 import configuration from './config/configuration';
+import { CatalogProductsModule } from './modules/catalog-products/catalog-products.module';
 
 @Module({
   imports: [

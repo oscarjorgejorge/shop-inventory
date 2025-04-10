@@ -1,9 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext, NotFoundException } from '@nestjs/common';
-import { CatalogService } from 'src/modules/catalog/services/catalog.service';
+import { CatalogProductsService } from 'src/modules/catalog-products/catalog-products.service';
 
 @Injectable()
 export class CatalogExistsGuard implements CanActivate {
-  constructor(private readonly catalogService: CatalogService) {}
+  constructor(private readonly catalogProductsService: CatalogProductsService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -15,14 +15,10 @@ export class CatalogExistsGuard implements CanActivate {
       return true;
     }
 
-    try {
-      await this.catalogService.findOne(catalogId);
-      return true;
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException(`Catalog with ID ${catalogId} not found`);
-      }
-      throw error;
+    const catalogExists = await this.catalogProductsService.catalogExists(catalogId);
+    if (!catalogExists) {
+      throw new NotFoundException(`Catalog with ID ${catalogId} not found`);
     }
+    return true;
   }
 }

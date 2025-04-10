@@ -8,15 +8,14 @@ import {
 import { CatalogRepository } from '../repositories/catalog.repository';
 import { CreateCatalogDto } from '../dto/create-catalog.dto';
 import { UpdateCatalogDto } from '../dto/update-catalog.dto';
-import { ProductService } from '../../product/product.service';
 import { PaginationOptions } from 'src/common/types/base.types';
+import { CatalogProductsService } from '../../catalog-products/catalog-products.service';
 
 @Injectable()
 export class CatalogService {
   constructor(
     private readonly catalogRepository: CatalogRepository,
-    @Inject(forwardRef(() => ProductService))
-    private readonly productService: ProductService,
+    private readonly catalogProductsService: CatalogProductsService,
   ) {}
 
   async create(data: CreateCatalogDto) {
@@ -48,7 +47,7 @@ export class CatalogService {
   }
 
   async delete(id: number) {
-    const numberOfproducts = await this.productService.countProducts({ catalogId: id });
+    const numberOfproducts = await this.catalogProductsService.countProductsByCatalogId(id);
 
     if (numberOfproducts > 0) {
       throw new BadRequestException(
